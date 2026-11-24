@@ -1,0 +1,49 @@
+================================================================================
+VIDEO 3 TRANSCRIPT
+Title: Video 3 — Buy-Side Investment Committee Presentation
+Student: Luca Richey | Portfolio Analyst | Project 2: Investment Management Application
+Project: Project 2 — Investment Management Application
+Mandate: Meridian Foundation Reserve ($100M Portfolio)
+================================================================================
+
+Good morning, members of the Investment Committee. My name is Luca Richey, and as your portfolio analyst, I am presenting our allocation recommendations for the one-hundred-million-dollar Meridian Foundation Reserve. 
+
+As you see on screen, our interactive Streamlit application is running live. 
+
+First, my AI disclosure: Generative AI models, including Gemini 1.5 Pro and Claude 3.5 Sonnet, were used for UI layout, matrix formulation, and document styling; every quantitative calculation and constraint check was audited and verified in code.
+Second, my authorship statement: The analysis, quantitative modeling, mandate defense, and recommendation to PILOT, DO NOT ADOPT, are entirely my own; this is an educational demonstration, not investment advice.
+
+Members of the committee, I lead directly with our decision:
+I recommend that the Investment Committee PILOT, DO NOT ADOPT, the proposed lowest-risk allocation. We recommend authorizing an initial ten-million-dollar—or ten percent—proof-of-concept pilot, while retaining ninety million dollars in low-turnover canonical benchmark sleeves.
+
+Our baseline lowest-risk allocation on Tab 1 holds:
+0% in Treasury Bills,
+20% in 10-Year Treasuries,
+25% in Investment-Grade Corporate Bonds,
+and 55% in Global Equities.
+
+This candidate delivers an expected annual return of 6.51%, beating our CPI plus 4% hurdle by one basis point. It generates an annualized volatility of 9.44%—which is 102 basis points lower risk than our 60/40 benchmark. And it provides a 20.0% reserve-eligible buffer, comfortably exceeding our 3.0% reserve floor by 17 percentage points.
+
+On Tab 3, notice why we cannot adopt the naive baselines:
+Baseline 1, Equal Weight (25% in each sleeve), delivers 50% liquidity and 5.21% volatility, but it FAILS Rule S2: its 5.20% return falls 130 basis points short of our 6.50% hurdle, eroding real purchasing power.
+Baseline 2, the client's own 60/40 benchmark, Candidate E, achieves 6.80% return, but it FAILS Rule S3 of its own trust mandate! Rule S3 mandates holding 3.0% in daily-liquid government paper or cash. Because corporate bonds carry credit and liquidity friction, they are not reserve-eligible. The 60/40 benchmark holds 0.0% in reserves, making it legally inadmissible under the foundation's trust agreement.
+
+Why recommend PILOT instead of ADOPT? 
+Look at Tab 4 and our Locked Changed-Input test. When we apply a realistic 50 basis point fee drag, the optimizer becomes acutely unstable. 
+Because the 6.50% hurdle binds immediately, the optimizer cannot hold 20% in 10-Year Treasuries. It shifts 15 percentage points—or fifteen million dollars—directly into equities, pushing equity weight to 70%. 
+This cuts our reserve buffer in half and spikes volatility from 9.44% to 11.57%. Our baseline 102 basis point risk advantage over the benchmark is erased, turning into a 111 basis point risk disadvantage! 
+Unconstrained optimization is an 'error maximizer' that concentrates risk during cost drag.
+
+Therefore, we propose three non-negotiable governance conditions before the committee reverses to ADOPT:
+1. Codify an explicit strategic equity policy band of 40% to 65% around our 55% target.
+2. Mandate Bayesian or Black-Litterman shrinkage return priors keeping shifts under 10 percentage points across a 50 bps fee drag.
+3. Formally quantify Statement S9 by establishing an ex-ante downside risk limit—such as a 1-year 95% CVaR of 10%.
+
+Operationally, our application enforces an active Process Stop Condition: if weight shifts exceed 10 points, if equity breaches 40%–65%, or if our point-in-time Moody's Baa credit spread BAA10Y exceeds 250 basis points, automated rebalancing halts immediately and escalates to the committee.
+
+We ask the committee today to approve three actions:
+1. Authorize a $10.0M allocation to launch the Meridian Lowest-Risk Pilot Portfolio for 12 months.
+2. Maintain $90.0M in canonical benchmark sleeves.
+3. Adopt our proposed governance amendments codifying policy bands and shrinkage priors.
+
+Thank you, and I welcome your questions.

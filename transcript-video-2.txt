@@ -1,0 +1,45 @@
+================================================================================
+VIDEO 2 TRANSCRIPT 
+Title: Video 2 — Detailed Codebase Walkthrough & Technical Ownership
+Student: Luca Richey | Portfolio Analyst | Project 2: Investment Management Application
+Project: Project 2 — Investment Management Application
+Mandate: Meridian Foundation Reserve ($100M Portfolio)
+================================================================================
+
+Hello, my name is Luca Richey. This is Video 2 for Project 2 in FIN 43900 at Purdue University, covering our codebase walkthrough and technical validation.
+
+First, my AI disclosure: Generative AI models, including Gemini 1.5 Pro and Claude 3.5 Sonnet, were used for code scaffolding, Streamlit layouts, and formatting. Every mathematical function, covariance calculation, and constraint check was audited, verified, and owned in code.
+Second, my authorship statement: The codebase architecture, mathematical implementation, and committee decision are entirely my own; this is an educational demonstration, not investment advice.
+
+Our repository follows strict KISS principles—relying exclusively on Python standard library modules for core calculations so that any stranger can run the full pipeline in under half a second.
+
+The architecture consists of four primary modules:
+1. mandate.py: Encodes the CIO's rules from the Meridian Foundation Reserve Mandate—specifically the derived 3.0% reserve floor (S3), the 90% five-day liquidity threshold (S8), and the 8% single corporate issuer limit (S6).
+2. portfolio.py: Contains our multi-asset financial mathematics. It validates the correlation matrix, computes covariance, calculates baselines, and runs our discrete 5-point grid search.
+3. run_project2.py: Our deterministic CLI runner. It imports mandate.py and portfolio.py directly with zero duplicated math, resolving file paths relative to the script.
+4. app.py: Our interactive Streamlit web dashboard.
+Data flows from prices.csv—holding 60 monthly observations for BIL, IEF, LQD, and VT—and asof.py, which implements point-in-time FRED/ALFRED ingestion.
+
+In portfolio.py:
+First, validate_correlation_matrix at line 73: Verifies that the matrix is square, bounded between minus one and positive one, symmetric within 10^-6, and has a unit diagonal; otherwise it raises a descriptive ValueError and refuses to execute.
+Second, build_covariance_matrix at line 124: Transforms pairwise correlations and volatilities into covariance space via Sigma_ij = rho_ij * sigma_i * sigma_j.
+Third, search_lowest_risk_mix at line 258: Evaluates discrete 5% long-only asset combinations summing to 100%. It filters for mixes satisfying the 6.50% return hurdle and 3.0% reserve minimum, then selects the combination that minimizes annualized portfolio volatility.
+
+Now let's demonstrate execution live in the terminal.
+I run our baseline command:
+python3 run_project2.py
+
+In 0.28 seconds, it audits our candidates: Candidate A passes, but Candidate E—the 60/40 benchmark—fails because its reserve weight is 0.0%. It computes our baselines and outputs our constrained portfolio: 0% Bills, 20% 10-Year, 25% IG, and 55% Equity, delivering 6.51% return and 9.44% volatility—102 basis points below the benchmark.
+
+Now, I execute our Locked Changed-Input test, which was committed to GitHub prior to execution:
+python3 run_project2.py --cost-bps 50
+
+Notice the result: Net sleeve returns drop by 50 basis points across the board. Because the 6.50% hurdle remains binding, the optimizer is forced to shift 15 percentage points—or fifteen million dollars—out of fixed income into equities, moving equity from 55% to 70%. 
+This cuts our reserve buffer from 20% to 10% and spikes volatility from 9.44% to 11.57%—erasing our risk advantage and making the portfolio 111 basis points riskier than the benchmark. The console flags: PASS MANDATE / UNSTABLE.
+
+Finally, our highest-risk unresolved limitation is Statement S9: 'cannot have a calendar-year loss greater than 10%.' 
+As encoded in mandate.py, realized loss is an ex-post stochastic return outcome, not a static constraint at t=0. A 55% equity portfolio can easily experience greater than 10% drawdown in a bear market. Treating S9 as a static pass/fail check gives false security; it requires formal ex-ante VaR/CVaR modeling.
+
+To govern this risk, our system enforces an automated Process Stop Condition: if an optimization run triggers a weight shift over 10 points, breaches our 40%–65% equity policy band, or if the BAA10Y credit spread exceeds 250 basis points, automated rebalancing halts immediately and escalates to the committee. 
+
+This concludes Video 2.

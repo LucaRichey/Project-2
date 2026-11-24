@@ -1,0 +1,6 @@
+# Meridian Foundation Reserve ($100M) — Investment Management Application
+# Core CLI runner (`python3 run_project2.py`, `mandate.py`, `portfolio.py`) operates on
+# Python 3.10+ standard library; pandas, numpy, and streamlit power the CSV estimator and web UI.
+pandas>=2.0.0
+numpy>=1.24.0
+streamlit>=1.30.0

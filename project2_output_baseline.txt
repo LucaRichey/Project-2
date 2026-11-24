@@ -1,0 +1,57 @@
+============================================================================================
+          MERIDIAN FOUNDATION RESERVE ($100M) — DECISION & RISK ALLOCATION RUNNER           
+                          Author: Luca Richey | Portfolio Analyst                           
+============================================================================================
+Active Parameters : Objective >= 6.50% | Reserve >= 3.0% | Cost Drag = 0.0 bps | IG-Equity Corr = 0.25 | Equity Return = 8.00%
+Prices Data File  : prices.csv
+
+[1] MANDATE COMPLIANCE AUDIT (mandate.py)
+    Derived Reserve Minimum: 3.0% (4 quarters x $0.75M / $100M)
+    Candidate     Reserve %  Liquid 5d %  Max Issuer %   Verdict
+    --------------------------------------------------------------------------------
+    Candidate A       14.0%       100.0%          0.0%   passes every checkable rule
+    Candidate B        1.0%        85.0%          9.0%   fails 3 rule(s)
+    Candidate C        2.0%       100.0%          8.0%   fails 1 rule(s)
+    Candidate D        3.0%       100.0%          0.0%   passes every checkable rule
+    Candidate E        0.0%       100.0%          0.0%   fails 1 rule(s)
+    Note: Calendar-year loss limit (CIO Statement S9) remains unquantified -> requires CIO clarification.
+
+[2] CANONICAL PORTFOLIO BASELINES (portfolio.py)
+    Portfolio            Bills / 10-Yr / IG / Equity      Return      Vol   Reserve  Meets 6.5%?
+    ----------------------------------------------------------------------------------------
+    Benchmark (60/40)    0.0 / 0.0 / 40.0 / 60.0           6.80%   10.46%      0.0%          yes
+    Equal Weight         25.0 / 25.0 / 25.0 / 25.0         5.20%    5.21%     50.0%           no
+    Inverse Volatility   84.3 / 6.0 / 7.0 / 2.6            3.77%    1.05%     90.3%           no
+
+[3] MERIDIAN MANDATE-CONSTRAINED LOWEST-RISK SEARCH (5-point grid)
+    Baseline (0 bps cost, 8.0% eq, 0.25 corr): 0.0% / 20.0% / 25.0% / 55.0%
+      -> Return: 6.51% | Volatility: 9.44% | Reserve-Eligible: 20.0% | Verdict: PASS (102 bps below 60/40 vol)
+    Active Run (net sleeve returns [3.5, 4.3, 5.0, 8.0]%): 0.0% / 20.0% / 25.0% / 55.0%
+      -> Return: 6.51% | Volatility: 9.44% | Reserve-Eligible: 20.0%
+      -> Largest Weight Change vs. Baseline: 0.0 pts (bills: 0.0% -> 0.0%, $0.0M on $100M reserve)
+      -> Volatility Delta vs. Baseline: +0.00% (+0 bps)
+    MANDATE VERDICT: PASS MANDATE / STABLE (0.0-pt shift; vol 9.44%)
+
+[4] VALIDATION & STRESS SUITE (Meridian Universe, Objective >= 6.50%, Reserve >= 3.0%)
+    Scenario                               Mix (B/10Y/IG/Eq)       Ret    Vol    Res  Max Shift
+    ----------------------------------------------------------------------------------------
+    Baseline (As Loaded)                   0/20/25/55            6.51%  9.44%  20.0%      0.0 pt
+    Stress 1: Equity Return 8.0% -> 7.0%   0/10/10/80            6.53% 12.94%  10.0%     25.0 pt
+    Stress 2: IG-Equity Corr 0.25 -> 0.50  0/40/0/60             6.52%  9.73%  40.0%     25.0 pt
+    Changed Input: Cost Drag 0 -> 50 bps   0/10/20/70            6.53% 11.57%  10.0%     15.0 pt
+
+[5] EMPIRICAL ETF PROXY UNIVERSE (BIL, IEF, LQD, VT | 2021-11-01 to 2026-10-01 | Cost Drag = 0.0 bps)
+    Empirical Annualized Means (All 59m) : BIL=3.71%, IEF=-1.67%, LQD=-0.61%, VT=11.58%
+    Empirical Annualized Means (Last 36m): BIL=4.30%, IEF=4.18%, LQD=6.13%, VT=21.21%
+    All Months Mix (BIL/IEF/LQD/VT): 60.0% / 0.0% / 0.0% / 40.0% | Ret=6.85% | Vol=6.01% | Res=60.0%
+    Last 36m Mix   (BIL/IEF/LQD/VT): 85.0% / 0.0% / 0.0% / 15.0% | Ret=6.83% | Vol=1.77% | Res=85.0%
+    Window Sensitivity (All vs. 36m): 25.0 pts (BIL: 60.0% -> 85.0%)
+
+[6] COMMITTEE DECISION LINE
+    PILOT, DO NOT ADOPT, the Meridian lowest-risk allocation (0% Bills / 20% 10-Yr /
+    25% IG / 55% Equity; 6.51% return, 9.44% volatility, 20.0% reserve-eligible) — and
+    reverse to ADOPT only if the Investment Committee codifies a 40%–65% equity policy
+    band, approves shrinkage/Black-Litterman return priors that keep largest weight
+    shifts under 10 percentage points across a 50 bps cost drag or 100 bps equity-return
+    shock, and quantifies the CIO's calendar-year drawdown limit (Statement S9).
+============================================================================================

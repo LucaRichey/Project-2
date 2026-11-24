@@ -1,0 +1,31 @@
+================================================================================
+VIDEO 1 TRANSCRIPT 
+Title: Video 1 — Research Evolution & AI-Output Check
+Student: Luca Richey | Portfolio Analyst | Project 2: Investment Management Application
+Project: Project 2 — Investment Management Application
+Mandate: Meridian Foundation Reserve ($100M Portfolio)
+================================================================================
+
+
+Hello, my name is Luca Richey. This is Video 1 for Project 2 in FIN 43900 at Purdue University.
+
+First, my AI disclosure: Generative AI models, including Gemini 1.5 Pro and Claude 3.5 Sonnet, were used for code scaffolding, Streamlit layouts, and formatting. Every mathematical calculation, constraint check, and sensitivity run was independently audited and verified in code.
+Second, my authorship statement: The financial analysis, modeling, and recommendation to PILOT, DO NOT ADOPT, are entirely my own; this is an educational demonstration, not investment advice.
+
+
+I initially assumed a standard Markowitz optimizer would produce an adoptable allocation for the Meridian Foundation. 
+
+Two findings changed my thinking:
+First, auditing the client’s own 60/40 benchmark—Candidate E in mandate.py—revealed that it FAILS Rule S3 of its own mandate. Holding 40% in corporate bonds and 60% in equities leaves 0.0% in reserve-eligible government paper, violating the 3.0% cash reserve floor.
+Second, in our changed-input stress testing, adding a realistic 50 basis point fee drag caused the optimizer to shift 15 percentage points—or fifteen million dollars—straight into equities, spiking volatility from 9.44% to 11.57% and wiping out our benchmark risk advantage. 
+My system therefore evolved from a simple optimizer into a multi-layered stability engine with point-in-time data gates and an explicit Process Stop Condition.
+
+
+For my AI-output check, the AI originally proposed formulating our portfolio as an unconstrained continuous quadratic program using scipy's SLSQP, yielding fractional weights like 54.819234% in equities. 
+
+I audited and REJECTED this output. In institutional reserve management, micro-percentage precision is economically meaningless and triggers excessive rebalancing turnover. I corrected it by implementing a discrete 5-point grid search in portfolio.py, generating clean, tradeable 5% allocations—yielding our baseline candidate of 0% Bills, 20% 10-Year, 25% IG, and 55% Equity. 
+
+Similarly, when the AI suggested using unlagged Nonfarm Payrolls, our point-in-time vintage audit revealed 381 historical revisions in PAYEMS. I rejected payrolls and admitted market-clearing credit spread BAA10Y with a strict 1-day as-of lag.
+
+
+Because raw optimization without policy bands produces dangerous capital shifts, I recommend: PILOT, DO NOT ADOPT. Authorize a ten-million-dollar pilot, and keep ninety million in canonical sleeves until policy bands and shrinkage priors are codified. Thank you.
